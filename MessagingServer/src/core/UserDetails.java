@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
 
 import core.exception.UserDetailsException;
+import core.exception.UserDoesNotExistException;
 
 public class UserDetails {
   private ConcurrentHashMap<String, InetSocketAddress> userIPMap = null;
@@ -35,6 +36,14 @@ public class UserDetails {
 
   public boolean doesUserExist(String Name) {
     return userIPMap.get(Name) == null ? false : true;
+  }
+
+  public InetSocketAddress getUserAddress(String name) throws UserDoesNotExistException {
+    if (userIPMap.contains(name)) {
+      return userIPMap.get(name);
+    } else {
+      throw new UserDoesNotExistException(UserDoesNotExistException.REASON_USER_DOES_NOT_EXISTS);
+    }
   }
 
 }

@@ -16,14 +16,16 @@ public class MessageForwardManager {
   void forwardMessage(Message msg, InetSocketAddress clientSocketAddress) {
     MessageType type = msg.getType();
     String name = msg.getUsername();
+    UserDetails userDetails = UserDetails.getInstance();
+
     switch (type) {
       case REGISTER:
-        UserDetails details = UserDetails.getInstance();
+        userDetails = UserDetails.getInstance();
         try {
-          details.addUser(name, clientSocketAddress);
+          userDetails.addUser(name, clientSocketAddress);
         } catch (UserDetailsException e) {
           ErrorMessageUsernameExists errorMsg = new ErrorMessageUsernameExists(name);
-          
+
         }
         break;
       case LOGIN:
@@ -35,7 +37,7 @@ public class MessageForwardManager {
         break;
 
       case MSG:
-
+        userDetails.
         break;
 
       default:
