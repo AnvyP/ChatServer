@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 
 import core.UserDetails;
 import core.exception.UserDetailsException;
+import core.exception.UserDoesNotExistException;
 
 import utils.Message.MessageType;
 import utils.errorMessage.ErrorMessageUsernameExists;
@@ -37,7 +38,13 @@ public class MessageForwardManager {
         break;
 
       case MSG:
-        userDetails.
+        InetSocketAddress address = null;
+        try {
+          address = userDetails.getUserAddress(name);
+        } catch (UserDoesNotExistException e) {
+          //TODO:
+          e.printStackTrace();
+        }
         break;
 
       default:
