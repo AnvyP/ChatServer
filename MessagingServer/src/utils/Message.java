@@ -19,7 +19,7 @@ public class Message {
   private MessageType type;
 
   public enum MessageType {
-    REGISTER, LOGIN, LOGOUT, MSG, REGISTER_FAIL
+    REGISTER, LOGIN, LOGOUT, MSG, REGISTER_FAIL,MSG_SENDING_FAILED
   }
 
   public String getUsername() {

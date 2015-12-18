@@ -9,6 +9,7 @@ import core.exception.UserDoesNotExistException;
 public class UserDetails {
   private ConcurrentHashMap<String, InetSocketAddress> userIPMap = null;
 
+  private final String LOG_TAG = UserDetails.class.getSimpleName();
   private UserDetails() {
     userIPMap = new ConcurrentHashMap<String, InetSocketAddress>();
   }

@@ -1,24 +1,36 @@
 package utils;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.BlockingQueue;
 
 import core.UserDetails;
 import core.exception.UserDetailsException;
 import core.exception.UserDoesNotExistException;
 
 import utils.Message.MessageType;
+import utils.errorMessage.ErrorMessageUsernameDoesnotExist;
 import utils.errorMessage.ErrorMessageUsernameExists;
 
 public class MessageForwardManager {
+  private static final String LOG_TAG = MessageForwardManager.class.getSimpleName();
+  private BlockingQueue<Message> messageQueue = null;
+
+
   public MessageForwardManager() {
     // TODO:
   }
 
-  
-  void forwardMessage(Message msg, InetSocketAddress clientSocketAddress) {
+
+  public MessageForwardManager(BlockingQueue<Message> messageQueue) {
+    this.messageQueue = messageQueue;
+  }
+
+
+  public void forwardMessage(Message msg, InetSocketAddress clientSocketAddress) {
     MessageType type = msg.getType();
     String name = msg.getUsername();
     UserDetails userDetails = UserDetails.getInstance();
+    Log.e(LOG_TAG, "Inside forwardMessage");
 
     switch (type) {
       case REGISTER:
@@ -41,10 +53,15 @@ public class MessageForwardManager {
       case MSG:
         InetSocketAddress address = null;
         try {
-          address = userDetails.getUserAddress(name);
+          address = userDetails.getUserAddress(msg.getToUser());
+          messageQueue.add(msg);
         } catch (UserDoesNotExistException e) {
-          //TODO:
-          e.printStackTrace();
+          Log.e(LOG_TAG, "Type: MSG, " + e.getMessage());
+          ErrorMessageUsernameDoesnotExist userDoesnotExistMsg =
+              new ErrorMessageUsernameDoesnotExist("localhost"); // TODO: change this to
+                                                                 // msg.getToUser()
+
+          messageQueue.add(userDoesnotExistMsg);
         }
         break;
 
