@@ -5,6 +5,7 @@ import java.util.concurrent.BlockingQueue;
 
 import core.server.Constants;
 
+import utils.Log;
 import utils.Message;
 
 public class MessageManager implements IMessageManger {
@@ -12,11 +13,13 @@ public class MessageManager implements IMessageManger {
   private final String LOG_TAG = MessageManager.class.getSimpleName();
   IncomingMessageManager messageReceiver = null;
   IOutgoingMessageManager messageSender = null;
-  //Creates sockets
+  // Creates sockets
   BlockingQueue<Message> messageQueue = null;
   private static final int MESSAGE_QUEUE_SIZE = Constants.MESSAGE_QUEUE_SIZE;
+
   @Override
   public void init() {
+    Log.d(LOG_TAG, "inside init()");
     messageQueue = new ArrayBlockingQueue<Message>(MESSAGE_QUEUE_SIZE);
     messageReceiver = new IncomingMessageManager(messageQueue);
     messageReceiver.init();
@@ -27,7 +30,7 @@ public class MessageManager implements IMessageManger {
   @Override
   public void deinit() {
     // TODO Auto-generated method stub
-    
+
   }
 
 }

@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 import utils.Log;
 import utils.Message;
 import utils.MessageParser;
+import core.exception.UserDoesNotExistException;
 import core.server.Constants;
 
 public class OutgoingMessageManager implements IOutgoingMessageManager {
@@ -66,7 +67,7 @@ public class OutgoingMessageManager implements IOutgoingMessageManager {
         Log.e(LOG_TAG, "in run()");
         try {
           synchronized (QUEUE_FETCH_LOCK) {
-            msg = messageQueue.take(); 
+            msg = messageQueue.take();
           }
         } catch (InterruptedException e) {
           Log.e(LOG_TAG, "Error in run()");
@@ -79,7 +80,7 @@ public class OutgoingMessageManager implements IOutgoingMessageManager {
       try {
         Log.d(LOG_TAG, ("Connecting to " + clientName + " on port " + port));
 
-        Socket server = new Socket(clientName, port);
+        Socket server = new Socket(UserDetails.getInstance().getUserAddress(clientName).getAddress(), port);
         Log.d(LOG_TAG, "Just connected to " + server.getRemoteSocketAddress());
 
         OutputStream outToClient = server.getOutputStream();
@@ -92,6 +93,8 @@ public class OutgoingMessageManager implements IOutgoingMessageManager {
         System.out.println("Server says " + parser.toMsg(in.readUTF()));
         server.close();
       } catch (IOException e) {
+        e.printStackTrace();
+      } catch (UserDoesNotExistException e) {
         e.printStackTrace();
       }
     }

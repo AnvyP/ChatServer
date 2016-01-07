@@ -6,6 +6,7 @@ import java.util.concurrent.BlockingQueue;
 import core.UserDetails;
 import core.exception.UserDetailsException;
 import core.exception.UserDoesNotExistException;
+import core.server.Constants;
 
 import utils.Message.MessageType;
 import utils.errorMessage.ErrorMessageUsernameDoesnotExist;
@@ -37,6 +38,11 @@ public class MessageForwardManager {
         userDetails = UserDetails.getInstance();
         try {
           userDetails.addUser(name, clientSocketAddress);
+          Message registrationSuccessMsg =
+              new Message(Constants.SERVER_USERNAME, "RegistationSuccessful", msg.getUsername(),
+                  MessageType.REGISTER_SUCCESS);
+          messageQueue.add(registrationSuccessMsg);
+
         } catch (UserDetailsException e) {
           ErrorMessageUsernameExists errorMsg = new ErrorMessageUsernameExists(name);
 
@@ -51,7 +57,7 @@ public class MessageForwardManager {
         break;
 
       case MSG:
-        //TODO: check if the user is registered.
+        // TODO: check if the user is registered.
         InetSocketAddress address = null;
         try {
           address = userDetails.getUserAddress(msg.getToUser());
@@ -59,8 +65,7 @@ public class MessageForwardManager {
         } catch (UserDoesNotExistException e) {
           Log.e(LOG_TAG, "Type: MSG, " + e.getMessage());
           ErrorMessageUsernameDoesnotExist userDoesnotExistMsg =
-              new ErrorMessageUsernameDoesnotExist("localhost"); // TODO: change this to
-                                                                 // msg.getToUser()
+              new ErrorMessageUsernameDoesnotExist(msg.getUsername()); 
 
           messageQueue.add(userDoesnotExistMsg);
         }

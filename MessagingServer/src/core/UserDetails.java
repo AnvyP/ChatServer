@@ -40,7 +40,7 @@ public class UserDetails {
   }
 
   public InetSocketAddress getUserAddress(String name) throws UserDoesNotExistException {
-    if (userIPMap.contains(name)) {
+    if (userIPMap.containsKey(name)) {
       return userIPMap.get(name);
     } else {
       throw new UserDoesNotExistException(UserDoesNotExistException.REASON_USER_DOES_NOT_EXISTS);

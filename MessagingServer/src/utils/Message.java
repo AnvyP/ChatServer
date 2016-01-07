@@ -1,5 +1,6 @@
 package utils;
 
+
 public class Message {
   public Message(String username, String message, String toUser, MessageType type) {
     super();
@@ -19,7 +20,7 @@ public class Message {
   private MessageType type;
 
   public enum MessageType {
-    REGISTER, LOGIN, LOGOUT, MSG, REGISTER_FAIL,MSG_SENDING_FAILED
+    REGISTER, LOGIN, LOGOUT, MSG, REGISTER_FAIL, MSG_SENDING_FAILED, REGISTER_SUCCESS
   }
 
   public String getUsername() {
@@ -37,4 +38,11 @@ public class Message {
   public MessageType getType() {
     return type;
   }
+
+  @Override
+  public String toString() {
+    return "Message [username=" + username + ", message=" + message + ", toUser=" + toUser
+        + ", type=" + type + "]";
+  }
+  
 }
