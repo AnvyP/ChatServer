@@ -51,6 +51,7 @@ public class MessageForwardManager {
         break;
 
       case MSG:
+        //TODO: check if the user is registered.
         InetSocketAddress address = null;
         try {
           address = userDetails.getUserAddress(msg.getToUser());
